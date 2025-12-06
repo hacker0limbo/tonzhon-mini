@@ -1,0 +1,52 @@
+.block {
+  height: 8px;
+  background-color: white;
+}
+
+.search-recommendations {
+  background-color: white;
+  padding: 16px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 12px;
+  .search-recommendation-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    // prettier-ignore
+    font-size: 12Px;
+    // color: #505259;
+  }
+}
+
+.search-history-container {
+  padding: 16px;
+  .search-history-title {
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .search-history-label {
+      // prettier-ignore
+      font-size: 16Px;
+      font-weight: bold;
+    }
+  }
+
+  .search-history-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    .search-history-tag {
+      padding: 10px;
+      width: fit-content;
+      .nut-tag-text {
+        // prettier-ignore
+        font-size: 14Px;
+      }
+    }
+  }
+}

@@ -1,0 +1,77 @@
+import { PropsWithChildren, useEffect } from "react";
+import { backgroundAudioManager, usePlayerStore } from "@/store";
+import Taro from "@tarojs/taro";
+import { usePlayer } from "@/hooks";
+
+import "@nutui/nutui-react-taro/dist/style.css";
+import "@/assets/font/iconfont.css";
+import "./app.scss";
+
+function App({ children }: PropsWithChildren<any>) {
+  const setIsPlaying = usePlayerStore((state) => state.setIsPlaying);
+  const setPlaybackProgress = usePlayerStore((state) => state.setPlaybackProgress);
+  const { playNextSong, playPreviousSong } = usePlayer();
+
+  // 全局监听播放器状态变化
+  useEffect(() => {
+    backgroundAudioManager.onError(() => {
+      Taro.showToast({
+        title: "播放错误",
+        icon: "error",
+      });
+    });
+
+    backgroundAudioManager.onPlay(() => {
+      console.log("监听到 play 事件");
+      setIsPlaying(true);
+    });
+
+    backgroundAudioManager.onPause(() => {
+      console.log("监听到 pause 事件");
+      setIsPlaying(false);
+    });
+
+    backgroundAudioManager.onStop(() => {
+      console.log("监听到 stop 事件");
+      setIsPlaying(false);
+      setPlaybackProgress(0);
+    });
+
+    backgroundAudioManager.onEnded(() => {
+      console.log("监听到 ended 事件");
+      setPlaybackProgress(0);
+      // 虽然这里设置了 false, 但是会触发 onPlay 事件立马设置为 true
+      setIsPlaying(false);
+      // 自动播放下一首
+      playNextSong();
+    });
+
+    backgroundAudioManager.onTimeUpdate(() => {
+      // 监听播放进度更新, 该事件在播放时持续触发
+      console.log("监听到 timeupdate 事件", backgroundAudioManager.currentTime, backgroundAudioManager.duration);
+      setPlaybackProgress(backgroundAudioManager.currentTime || 0);
+    });
+
+    backgroundAudioManager.onNext(() => {
+      console.log("监听到 next 事件");
+      playNextSong();
+    });
+
+    backgroundAudioManager.onPrev(() => {
+      console.log("监听到 prev 事件");
+      playPreviousSong();
+    });
+
+    backgroundAudioManager.onSeeking(() => {
+      console.log("监听到 seeking 事件");
+    });
+
+    backgroundAudioManager.onSeeked(() => {
+      console.log("监听到 seeked 事件");
+    });
+  }, [playNextSong, playPreviousSong, setIsPlaying, setPlaybackProgress]);
+
+  return children;
+}
+
+export default App;

@@ -1,0 +1,24 @@
+.song-list-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 4px;
+
+  .song-list-title-label {
+    // prettier-ignore
+    font-size: 18Px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .song-list-title-extra {
+    // prettier-ignore
+    font-size: 14Px;
+    color: #505259;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}

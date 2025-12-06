@@ -1,0 +1,20 @@
+.artist-container {
+  padding: 16px;
+
+  .artist-info {
+    margin: 16px 0;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+
+    .artist-info-name {
+      // prettier-ignore
+      font-size: 20Px;
+      font-weight: bold;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+.playlist-group-container {
+  // 修复一下 nut-col 组件的 padding 问题, 第一个元素左侧没有给 padding
+  & .nut-col:first-child {
+    padding-left: 8px;
+  }
+  .playlist-item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .playlist-cover {
+    }
+    .playlist-name {
+      // prettier-ignore
+      // font-size: 14Px;
+    }
+  }
+}

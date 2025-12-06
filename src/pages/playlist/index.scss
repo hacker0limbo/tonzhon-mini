@@ -1,0 +1,35 @@
+.playlist-container {
+  padding: 16px;
+
+  .playlist-info-container {
+    .playlist-info-cell {
+      display: flex;
+      gap: 16px;
+      align-items: initial !important;
+
+      .playlist-info-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .playlist-name {
+          // prettier-ignore
+          font-size: 18Px;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .playlist-actions-cell {
+      display: flex;
+      justify-content: space-around;
+      align-items: center !important;
+
+      .playlist-action-item {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+    }
+  }
+}

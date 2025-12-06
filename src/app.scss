@@ -1,0 +1,78 @@
+page {
+  background-color: #f7f8fa;
+  height: 100%;
+  box-sizing: border-box;
+  --nutui-color-primary: #dc8f03;
+  --nutui-space-gap: 4px;
+  --nutui-searchbar-background: white;
+  --nutui-grid-item-content-bg-color: white;
+  --nutui-hoverbutton-item-background: white;
+  --nutui-hoverbutton-item-background-active: #f6f6f6;
+  --nutui-pagination-color: rgba(0, 0, 0, 0.88);
+  --nutui-pagination-item-border-color: transparent;
+  --nutui-pagination-disable-background-color: transparent;
+  --nutui-tabs-titles-background-color: white;
+  --nutui-color-mask-part: #e0e0e0;
+  --nutui-segmented-item-color: rgba(0, 0, 0, 0.88);
+  --nutui-segmented-active-background: white;
+  --nutui-form-item-label-width: auto;
+}
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+// 歌曲元素基本样式
+.song-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center !important;
+  gap: 48px;
+
+  .song-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+
+    .song-label {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+
+      .song-label-name {
+        font-weight: bold;
+      }
+      .song-label-artist {
+        // prettier-ignore
+        font-size: 12Px;
+      }
+    }
+  }
+
+  .song-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+// 歌曲是否匹配当前歌曲高亮
+.highlight,
+.match-current-song {
+  color: #dc8f03;
+}
+
+.grey {
+  color: #505259;
+}
+
+.nut-avatar-square {
+  & > .nut-avatar-img {
+    border-radius: 8px;
+  }
+}

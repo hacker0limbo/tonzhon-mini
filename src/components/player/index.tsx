@@ -1,0 +1,136 @@
+import { Avatar, Cell, Progress, SafeArea, pxTransform } from "@nutui/nutui-react-taro";
+import { View, Text } from "@tarojs/components";
+import { Image, List, PlayStart, IconFont, PlayStop } from "@nutui/icons-react-taro";
+import { useState } from "react";
+import PlayerQueuePopup from "@/components/player-queue-popup";
+import { usePlayerStore, backgroundAudioManager } from "@/store";
+import Taro from "@tarojs/taro";
+import { usePlayer } from "@/hooks";
+import { formatSongDurationToPercent } from "@/utils";
+
+import "./index.scss";
+
+export default function Player() {
+  const [showPlayerQueuePopup, setShowPlayerQueuePopup] = useState(false);
+  const isPlaying = usePlayerStore((state) => state.isPlaying);
+  const currentSong = usePlayerStore((state) => state.currentSong);
+  const playbackProgress = usePlayerStore((state) => state.playbackProgress);
+  const { playNextSong, playPreviousSong } = usePlayer();
+
+  return (
+    <View className="player">
+      <Progress
+        strokeWidth="3"
+        percent={formatSongDurationToPercent(playbackProgress, backgroundAudioManager.duration)}
+        color="var(--nutui-color-primary)"
+      />
+      <Cell className="player-cell song-cell">
+        <View
+          className="song-info"
+          // 这里用 flex 撑满左边的空间, 以便点击区域更大
+          style={{ flex: 1 }}
+          onClick={() => {
+            // 跳转到全屏播放页面
+            if (currentSong) {
+              Taro.navigateTo({
+                url: "/pages/player-full/index",
+              });
+            } else {
+              Taro.showToast({
+                title: "暂无播放歌曲",
+                icon: "none",
+              });
+            }
+          }}
+        >
+          <Avatar src={currentSong?.cover} icon={currentSong ? undefined : <Image />} shape="square" size="normal" />
+          <View className="song-label">
+            <Text className="song-label-name ellipsis">{currentSong?.name || "暂无歌曲"}</Text>
+            <Text className="song-label-artist ellipsis">
+              {currentSong?.artists?.map((a) => a.name).join(" / ") || "未知歌手"}
+            </Text>
+          </View>
+        </View>
+        <View className="song-actions">
+          <IconFont
+            fontClassName="iconfont"
+            classPrefix="icon"
+            name="shangyishoushangyige"
+            size={24}
+            style={{ marginTop: pxTransform(4) }}
+            onClick={() => {
+              if (currentSong) {
+                playPreviousSong();
+              } else {
+                Taro.showToast({
+                  title: "暂无播放歌曲",
+                  icon: "none",
+                });
+              }
+            }}
+          />
+          {isPlaying ? (
+            <PlayStop
+              size={32}
+              onClick={() => {
+                if (currentSong) {
+                  backgroundAudioManager.pause();
+                } else {
+                  Taro.showToast({
+                    title: "暂无播放歌曲",
+                    icon: "none",
+                  });
+                }
+              }}
+            />
+          ) : (
+            <PlayStart
+              size={32}
+              onClick={() => {
+                if (currentSong) {
+                  backgroundAudioManager.play();
+                } else {
+                  Taro.showToast({
+                    title: "暂无播放歌曲",
+                    icon: "none",
+                  });
+                }
+              }}
+            />
+          )}
+          <IconFont
+            fontClassName="iconfont"
+            classPrefix="icon"
+            name="xiayigexiayishou"
+            size={24}
+            style={{ marginTop: pxTransform(4) }}
+            onClick={() => {
+              if (currentSong) {
+                playNextSong();
+              } else {
+                Taro.showToast({
+                  title: "暂无播放歌曲",
+                  icon: "none",
+                });
+              }
+            }}
+          />
+          <List
+            size={28}
+            style={{ marginLeft: pxTransform(4) }}
+            onClick={() => {
+              setShowPlayerQueuePopup(true);
+            }}
+          />
+        </View>
+      </Cell>
+      <PlayerQueuePopup
+        visible={showPlayerQueuePopup}
+        onClose={() => {
+          setShowPlayerQueuePopup(false);
+        }}
+      />
+      <SafeArea position="bottom" className="player-safe-area" />
+    </View>
+  );
+}

@@ -1,0 +1,30 @@
+.playback-order {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.player-queue-song-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center !important;
+  gap: 48px;
+
+  .player-queue-song-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+
+    .player-queue-song-artist {
+      // prettier-ignore
+      font-size: 12Px;
+    }
+  }
+
+  .player-queue-song-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
