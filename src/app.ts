@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect } from "react";
 import { backgroundAudioManager, usePlayerStore } from "@/store";
-import Taro from "@tarojs/taro";
+import Taro, { useLaunch } from "@tarojs/taro";
 import { usePlayer } from "@/hooks";
 
 import "@nutui/nutui-react-taro/dist/style.css";

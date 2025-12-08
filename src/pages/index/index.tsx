@@ -2,15 +2,16 @@ import { View, Text, ScrollView } from "@tarojs/components";
 import { useEffect, useState } from "react";
 import Player from "@/components/player";
 import { Cell, pxTransform, SearchBar, Tabs, type TabPaneProps } from "@nutui/nutui-react-taro";
-import { getHotSongs, getNewSongs, getRecommendPlaylists, type Playlist, type Song } from "@/api";
+import { Artist, getHotSongs, getNewSongs, getRecommendPlaylists, type Playlist, type Song } from "@/api";
 import Taro from "@tarojs/taro";
 import { usePlayerHeight } from "@/hooks";
 import { ArrowRight } from "@nutui/icons-react-taro";
 import SongList from "@/components/song-list";
 import ArtistList from "@/components/artist-list";
 import PlaylistGroup from "@/components/playlist-group";
+import { getCloud } from "@/cloud";
 
-import { popularArtists } from "./popular-artists";
+import Wiki from "./Wiki";
 import "./index.scss";
 
 type TabKey = "recommend" | "artists" | "playlists";
@@ -23,6 +24,8 @@ export default function Index() {
   const [loadingNewSongs, setLoadingNewSongs] = useState(false);
   const playerHeight = usePlayerHeight();
   const [recommendPlaylists, setRecommendPlaylists] = useState<Playlist[]>([]);
+  const [popularArtists, setPopularArtists] = useState<Artist[]>([]);
+  const [isReviewed, setIsReviewed] = useState<boolean>(false);
 
   const tabs: Array<Partial<TabPaneProps & { children: React.ReactNode }>> = [
     {
@@ -177,12 +180,43 @@ export default function Index() {
   useEffect(() => {
     if (loadingHostSongs || loadingNewSongs) {
       Taro.showLoading({
-        title: "加载推荐歌曲中",
+        title: "加载数据中",
       });
     } else {
       Taro.hideLoading();
     }
   }, [loadingHostSongs, loadingNewSongs]);
+
+  useEffect(() => {
+    getCloud().then((cloud) => {
+      cloud
+        .database()
+        .collection("tz-popular-artists")
+        .get()
+        .then((res) => {
+          console.log("popular artists", res);
+          setPopularArtists(res.data as Artist[]);
+        });
+    });
+  }, []);
+
+  useEffect(() => {
+    getCloud().then((cloud) => {
+      cloud
+        .database()
+        .collection("tz-settings")
+        .get()
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data[0] as { isReviewed: boolean } | undefined;
+          setIsReviewed(data?.isReviewed ?? false);
+        });
+    });
+  }, []);
+
+  if (!isReviewed) {
+    return <Wiki />;
+  }
 
   return (
     <ScrollView scrollY>
